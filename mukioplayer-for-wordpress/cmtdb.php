@@ -61,17 +61,16 @@ class CmtDB {
   }
   //get cmt meta data
   function getCM() {
-    $cid = sqlite_escape_string($this->cid);
-    $ret = $this->db->query("SELECT * FROM CmtMeta WHERE cid = '$cid';");
-    if (!$ret) {
+    $sth = $this->db->prepare("SELECT * FROM CmtMeta WHERE cid = ?;");
+    if (!$sth->execute(array($this->cid))) {
       return false;
     }
-    return $ret->fetch();
+    return $sth->fetch();
   }
   //insert new CmtMeta
   function insertCM($post,$author) {
-    $cid = sqlite_escape_string($this->cid);
-    $this->db->exec("INSERT INTO CmtMeta (cid,post,author) VALUES ('$cid',$post,$author);");
+    $sth = $this->db->prepare("INSERT INTO CmtMeta (cid,post,author) VALUES (?,?,?);");
+    $sth->execute(array($this->cid,$post,$author));
     // $this->alert("\nINSERT INTO CmtMeta (cid,post,author) VALUES ('$cid',$post,$author);\n");
     $this->post   = $post;
     $this->author = $author;
@@ -136,11 +135,12 @@ class CmtDB {
     $stime    += 0;
     $size     += 0;
     $postdate += 0;
-    $message  = sqlite_escape_string($message);
+    $message  = $message;
     if ($postdate == -1) {
       $postdate = time();
     }
-    $this->db->exec("INSERT INTO Cmt (cmid, color, mode, stime, size, message, postdate,user) VALUES ({$this->id}, $color, $mode, $stime, $size, '$message', $postdate,$user);");
+    $sth = $this->db->prepare("INSERT INTO Cmt (cmid, color, mode, stime, size, message, postdate,user) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+    $sth->execute(array($this->id, $color, $mode, $stime, $size, $message, $postdate,$user));
     $this->totlenum ++;
     $this->updateCM();
   }
