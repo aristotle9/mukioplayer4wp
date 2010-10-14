@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<conf>
+  <style>
+    <!-- 弹幕字体 -->
+    <fontfamily>黑体</fontfamily>
+    <!-- 是否加粗,true/false -->
+    <bold>true</bold>
+    <!-- 滤镜特效,及参数,可以选择发光还是阴影,参数参照flash滤镜参考中说明 -->
+    <!-- <effect name='DropShadowFilter'
+             distance='3.0'
+             angle='45.0'
+             color='0x000000'
+             alpha='1.0'
+             blurX='1.0'
+             blurY='1.0'
+             strength='0.55'
+             quality='1'
+             inner='false'
+             knockout='false'
+             hideObject='false' /> -->
+    <effect name='GlowFilter'
+             color='0x000000'
+             alpha='0.7'
+             blurX='3.0'
+             blurY='3.0'
+             strength='2.0'
+             quality='1'
+             inner='false'
+             knockout='false' />
+    <!-- 为纯黑色弹幕特设的滤镜特效,及参数 -->
+    <!-- <beffect name='DropShadowFilter'
+             distance='3.0'
+             angle='45.0'
+             color='0xFFFFFF'
+             alpha='1.0'
+             blurX='1.0'
+             blurY='1.0'
+             strength='1.0'
+             quality='1'
+             inner='false'
+             knockout='false'
+             hideObject='false' /> -->
+    <beffect name='GlowFilter'
+             color='0xEEEEEE'
+             alpha='0.7'
+             blurX='3.0'
+             blurY='3.0'
+             strength='2.0'
+             quality='1'
+             inner='false'
+             knockout='false' />
+  </style>
+  <performance>
+    <!-- 起始位置/像素 -->
+    <startpos>30</startpos>
+    <!-- 速度系数 -->
+    <vc>150</vc>
+    <!-- 最长弹幕/像素 -->
+    <maxwidth>2048</maxwidth>
+    <!-- 最高弹幕/像素 -->
+    <maxheight>768</maxheight>
+    <!-- 表面弹幕容量,包括有特效和无特效 -->
+    <maxonstage>120</maxonstage>
+    <!-- 特效弹幕容量,如果超出该容量,但是未达到表面弹幕容量,超出部分为无特效 -->
+    <maxwitheffect>80</maxwitheffect>
+  </performance>
+  <server>
+    <!-- 弹幕加载地址,变量{$id}为弹幕id,{$type}为视频来源类型,{$puri}为播放器所在的目录URI,比如http://xxx/newflvplayer/,播放器会在末尾自动添加随机参数r -->
+    <load>{$puri}../php-scripts/get.php?cid={$id}</load>
+    <!-- <load>http://mukiolib.appspot.com/{$type}/{$id}/get/</load> -->
+    <!-- <load>{$puri}../php-scripts/getxml.php?id={$id}</load> -->
+    <!-- <load>'/newflvplayer/xmldata/{$id}/comment_on.xml</load> -->
+    <!-- <load>'/subtitle/{$id}?</load> -->
+    <!-- POST发送地址,如果不提供则不发送,变量可用 -->
+    <send>/wp-admin/admin-ajax.php</send>
+    <!-- <send>http://mukiolib.appspot.com/{$type}/{$id}/post/</send> -->
+    <!-- 远程调用的网关 -->
+    <gateway>{$puri}../php-scripts/amfphp/gateway.php</gateway>
+  </server>
+</conf>
