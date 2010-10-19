@@ -4,6 +4,8 @@ if(!defined('MUKIOCMT_DB')) {
 }
 //数据库类
 class CmtDB {
+  //全局数据库连接,防止出现多个连接
+  static $database = null;
   //字符串的弹幕id,外部引用时使用
   var $cid;
   //内部id,整数
@@ -76,10 +78,16 @@ class CmtDB {
     $this->author = $author;
   }
   function connectDB() {
+    if(CmtDB::$database) {
+      $this->db = CmtDB::$database;
+      return;
+    }
     if (!$this->db) {
       $this->db = new PDO('sqlite:' . MUKIOCMT_DB);
       if (!$this->db) {
         $this->alert('Database connecting failed.');
+      } else {
+        CmtDB::$database = $this->db;
       }
     }
   }
