@@ -61,6 +61,8 @@ if (!class_exists('CVideosManager')) {
       //弹幕提交
       add_action( 'wp_ajax_nopriv_mukio_submit', array($this,'mukio_submit_unlogin'));
       add_action( 'wp_ajax_mukio_submit', array($this,'mukio_submit'));
+      //安装时做一些设置
+      register_activation_hook(__FILE__,array($this,'mukio_install'));
     }
     
     //填充配置
@@ -424,6 +426,16 @@ if (!class_exists('CVideosManager')) {
       }
     // die('');
     }//end insertCmtMetas
+    /** 激活时对数据库文件读写权限的更改,因为在linux系统上可能会无法写入弹幕 **/
+    function mukio_install()
+    {
+        if(!defined('MUKIOCMT_DB'))
+        {
+            define('MUKIOCMT_DB',dirname(__FILE__) . '/database/mkdb.db3');
+        }
+        chmod(MUKIOCMT_DB, 0666);
+    }//endfunction mukio_install
+    
   }//endclass
 }//endif
 
