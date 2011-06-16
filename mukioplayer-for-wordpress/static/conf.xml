@@ -75,6 +75,10 @@
     <send>/wp-admin/admin-ajax.php</send>
     <!-- <send>http://mukiolib.appspot.com/{$type}/{$id}/post/</send> -->
     <!-- 远程调用的网关 -->
-    <gateway>{$puri}../php-scripts/amfphp/gateway.php</gateway>
+    <!-- <gateway>{$puri}../php-scripts/amfphp/gateway.php</gateway> -->
   </server>
+  <video>
+    <!-- qq的id转化为视频的简单模板 -->
+    <qid2uri>http://vsrc.store.qq.com/{$id}.flv?channel=vhot2&amp;sdtfrom%3dv2&amp;r%3d931&amp;rfc=v0</qid2uri>
+  </video>
 </conf>

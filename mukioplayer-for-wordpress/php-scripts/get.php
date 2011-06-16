@@ -1,5 +1,5 @@
 <?php
-//生成弹幕xml文件
+//鐢熸垚寮瑰箷xml鏂囦欢
 require_once('../cmtdb.php');
 
 class Cmt {
@@ -16,7 +16,7 @@ class Cmt {
   function query() {
     $this->cmts = $this->cmtdb->get_cmts();
   }
-  function render($type='ac') {
+  function render($type='bili') {
     switch($type) {
       case 'ac':
         return $this->renderAC();
@@ -59,6 +59,30 @@ class Cmt {
     return htmlspecialchars(preg_replace("/[\x{00}-\x{08}\x{0b}-\x{0c}\x{0e}-\x{1f}]+/u", "*",$str));
   }
   private function renderBili() {
+    $this->headerBili();
+    if ($this->cmts) {
+      foreach($this->cmts as $c) {
+        $this->cellBili($c);
+      }
+    }
+    $this->footerBili();
+  }
+  private function headerBili() {
+    header('Content-Type: text/xml');
+    if (isset($_GET['d'])) {
+      Header('Content-Disposition: attachment; filename="' . $_GET['cid'] . '.xml"');
+    }
+    echo "<?xml version='1.0' encoding='utf-8'?>\n";
+    echo "<i>\n";
+  }
+  private function footerBili() {
+    echo "</i>\n";
+  }
+  private function cellBili($item) {
+    $ps = array($item['stime'],$item['mode'],$item['size'],$item['color'],$item['postdate']);
+    $property = join(',',$ps);
+    $text = $this->escapexmlstring($item['message']);
+    echo '<d p=\'' . $property . '\'>' . $text . '</d>' . "\n";
   }
   private function failed($msg) {
     die($msg);

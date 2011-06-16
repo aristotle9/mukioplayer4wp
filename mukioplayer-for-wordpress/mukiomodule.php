@@ -3,7 +3,7 @@
 Plugin Name: MukioPlayer for WordPress
 Plugin URI: http://code.google.com/p/mukioplayer4wp
 Description: Provides video-comment service to the videos embedded in your articles. MukioPlayer 弹幕播放器插件
-Version: 1.2,2010.10.14
+Version: 1.5,2011.06.17
 Author: Aristotle9
 Author URI: http://hi.baidu.com/aristotle9
 
@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 //define the urls
-define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukioplayer.swf');
+define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/playerloader.swf');
 define('MUKIOPLAYER_JS_URL' ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-sect.js');
 define('MUKIOTAG_JS_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-tag.js');
 define('MD5_JS_URL'         ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/jquery.md5.js');
@@ -432,6 +432,14 @@ if (!class_exists('CVideosManager')) {
         if(!defined('MUKIOCMT_DB'))
         {
             define('MUKIOCMT_DB',dirname(__FILE__) . '/database/mkdb.db3');
+            //如果数据库文件不存在,就创建一个数据库
+            if(!file_exists(MUKIOCMT_DB))
+            {
+              $db = new PDO('sqlite:' . MUKIOCMT_DB);
+              //读取创建表的初始化语句
+              $sql = file_get_contents(dirname(__FILE__) . '/database/mkcmt.sql');
+              $db->exec($sql);
+            }
         }
         chmod(MUKIOCMT_DB, 0666);
     }//endfunction mukio_install

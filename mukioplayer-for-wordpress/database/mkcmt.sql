@@ -10,17 +10,17 @@ postdate integer not null,
 user     integer default 0
 );
 create index CmtCid on Cmt (cmid);
-/* ±¸ÓÃ                                      */
+/* å¤‡ç”¨                                      */
 create index CmtRange on Cmt (cmid,mode);
-/* ×ö·Ö¼¶¾ÍÓÃmode×Ö¶Î,·Ö³É¼¸¸ö·¶Î§           */
-/* 0x000 - 0x0ff ÆÕÍ¨µ¯Ä»                    */
-/* 0x100 - 0x1ff ×ÖÄ»µ¯Ä»                    */
-/* ²»ÅÂmode²»¹»ÓÃ                            */
+/* åšåˆ†çº§å°±ç”¨modeå­—æ®µ,åˆ†æˆå‡ ä¸ªèŒƒå›´           */
+/* 0x000 - 0x0ff æ™®é€šå¼¹å¹•                    */
+/* 0x100 - 0x1ff å­—å¹•å¼¹å¹•                    */
+/* ä¸æ€•modeä¸å¤Ÿç”¨                            */
 create table CmtMeta(
 id       integer primary key,
 cid      varchar(255) not null,
 totlenum integer default 0,
-savednum integer default 0,/* ±¸ÓÃ */
+savednum integer default 0,
 maxnum   integer default 1000,
 enable   integer default 1,
 post     integer default 0,
