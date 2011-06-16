@@ -366,20 +366,50 @@ function toggle(event) {
     if (!$xml) {
       return FALSE;
     }
-    for($i = 0; $i < count($xml->data); $i++) {
-      $item = $xml->data[$i];
-      
-      $mode     = $item->message["mode"] + 0;
-      $color    = $item->message["color"] + 0;
-      $fontsize = $item->message["fontsize"] + 0;
-      $message  = $item->message.'';
-      $playTime = $item->playTime + 0;
-      $times    = $item->times.'';///date("Y-m-d H:i:s"),//$item->times.'',
-      // $dt       = DateTime::createFromFormat("Y-m-d H:i:s",$times);
-      
-      call_user_func(array($this->cmtdb,'insert'), $color, $mode, $playTime, $fontsize, $message, -1,$current_user->ID);
+    //格式判断
+    if(count($xml->data))
+    {
+      for($i = 0,$n = count($xml->data); $i < $n; $i++) {
+        $item = $xml->data[$i];
+        
+        $mode     = $item->message["mode"] + 0;
+        $color    = $item->message["color"] + 0;
+        $fontsize = $item->message["fontsize"] + 0;
+        $message  = $item->message.'';
+        $playTime = $item->playTime + 0;
+        $times    = $item->times.'';///date("Y-m-d H:i:s"),//$item->times.'',
+        // $dt       = DateTime::createFromFormat("Y-m-d H:i:s",$times);
+        
+        call_user_func(array($this->cmtdb,'insert'), $color, $mode, $playTime, $fontsize, $message, -1,$current_user->ID);
+      }
+      return count($xml->data);
     }
-    return count($xml->data);
+    //新的格式
+    else if(count($xml->l))
+    {
+      for($i = 0, $n = count($xml->l); $i < $n; $i ++)
+      {
+        $item = $xml->l[$i];
+        try 
+        {
+          $a = explode(',',$item['i']);
+          
+          $playTime = $a[0] + 0;
+          $fontsize = $a[1] + 0;
+          $color = $a[2] + 0;
+          $mode = $a[3] + 0;
+          $message = $item . '';
+          $times = $item->times . '';
+          
+          call_user_func(array($this->cmtdb,'insert'), $color, $mode, $playTime, $fontsize, $message, -1,$current_user->ID);
+        }
+        catch(Exception $e)
+        {
+        }
+      }
+      return count($xml->l);
+    }
+    return false;
   }
   //处理弹幕接收
   function cmt_submit() {
