@@ -26,6 +26,14 @@
 5. 如果文章所属的分类在后来修改成允许嵌入弹幕,弹幕标签会被解析,
    但是弹幕ID没有生成.要生成弹幕ID必须对该文章编辑再保存.
 
+Mukioplayer for Wordpress 1.5(2011年6月17日)   
+*  默认使用普通方式加载弹幕
+*  默认使用BiliBili的格式生成弹幕文件
+*  支持新的Acfun格式导入弹幕
+*  自动判断并创建Sqlite3数据库文件,自动修改读写权限,避免产生无法保存的错误
+*  主播放器更名为mukioplayer.swf
+   加载辅助器更名为playerloader.swf
+*  qq视频地址放在conf.xml中配置
 
 Mukioplayer for Wordpress 1.2
 *  使用amf格式加载弹幕
