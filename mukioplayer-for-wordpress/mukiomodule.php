@@ -25,8 +25,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 //define the urls
-define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/playerloader.swf');
+//define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/playerloader.swf');
+define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukioplayer1.swf');
 define('MUKIOPLAYER_JS_URL' ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-sect.js');
+define('MUKIOPLAYER_JS2_URL',WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-prompt.js');
 define('MUKIOTAG_JS_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-tag.js');
 define('MD5_JS_URL'         ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/jquery.md5.js');
 define('MUKIOTAG_CMTICO_URL',WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/cmtico.png');
@@ -53,7 +55,7 @@ if (!class_exists('CVideosManager')) {
       $this->getOptions();
       add_filter("the_content", array($this,"cvideo_tag_callback"), 11);
       add_action("save_post", array($this,"save_post"));
-      // add_action('wp_head', array($this,'cvideo_css'));
+       add_action('wp_head', array($this,'cvideo_css'));
       add_action('wp_head', array($this,'cvideo_js'));
       // add_action('wp_footer', array($this,'cvideo_videos_js'));
       add_action("admin_menu", array($this,"admin_menu_link"));
@@ -74,8 +76,8 @@ if (!class_exists('CVideosManager')) {
           //autopagination,使用插件分页
           //perpage,每页显示弹幕
           $theOptions = array(
-                        'width'=>540,
-                        'height'=>432,
+                        'width'=>950,
+                        'height'=>450,
                         'categories'=>array(),
                         'autopagination'=>true,
                         'perpage'=> 30,
@@ -118,7 +120,7 @@ if (!class_exists('CVideosManager')) {
       }
       $this->lists = false;
       if ($this->options['autopagination']) {
-        return '<div id="mkplayer-content"><span id="mkplayer-sectsel"></span><div id="mkplayer-box"></div><span id="mkplayer-desc"></span></div>' . $this->cvideo_tag_start_parse($the_content) . $this->cvideo_videos_js();
+        return '<div id="mkplayer-content"><span id="mkplayer-sectsel"></span><br /><div id="mkplayer-box" class="playerHolder"></div><div class="placeHolder"></div><span id="mkplayer-desc"></span></div>' . $this->cvideo_tag_start_parse($the_content) . $this->cvideo_videos_js();
       }
       return $this->cvideo_tag_start_parse($the_content);
     }
@@ -134,7 +136,6 @@ if (!class_exists('CVideosManager')) {
     function cvideo_tag_parser($matches) {
       global $post;
       //x外围有[]的表示对标签转义,输出转义后的标签
-      //转义个P,都占用了下一个表达式的标签了
       // if ($matches[1] == "[" && $matches[5] == "]") {
         // return substr($matches[0], 1, -1);
       // }
@@ -208,7 +209,23 @@ if (!class_exists('CVideosManager')) {
       if(!is_singular()) {
         return;
       }
-      echo "<style type='text/css'>.mkplayer-box{width:540px;height:445px;overflow-y:hidden;overflow-x:scroll;}</style>	";
+//      echo "<style type='text/css'>.mkplayer-box{width:540px;height:445px;overflow-y:hidden;overflow-x:scroll;}</style>	";
+      ?><style type='text/css'>
+.playerHolder
+{
+    width:<?php echo $this->options['width'];?>px;
+    height:<?php echo $this->options['height'];?>px;
+    position:absolute;
+    z-index:0;
+}
+.placeHolder
+{
+    width:<?php echo $this->options['width'];?>px;
+    height:<?php echo $this->options['height'];?>px;
+    visibility: hidden;
+    border: 0 none;
+}
+</style><?php
     }
     //js
     function cvideo_js() {
@@ -219,6 +236,7 @@ if (!class_exists('CVideosManager')) {
         return;
       }
       echo '<script type="text/javascript" src="' . MUKIOPLAYER_JS_URL . '"></script>';
+      echo '<script type="text/javascript" src="' . MUKIOPLAYER_JS2_URL . '"></script>';
     }
     function cvideo_videos_js() {
       $str = '';

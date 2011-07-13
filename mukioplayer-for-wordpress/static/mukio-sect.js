@@ -37,7 +37,8 @@ function renderVideo() {
 }
 //给生成网页调用的
 function addVideo(w,h,flashvars,ptitle,description) {
-  VideoList.push({'width':w,'height':h,'ptitle':ptitle,'flashvars':flashvars,'player':MukioPlayerURI,'desc':description});
+//  VideoList.push({'width':w,'height':h,'ptitle':ptitle,'flashvars':flashvars,'player':MukioPlayerURI,'desc':description});
+  VideoList.push({'width':"100%",'height':"100%",'ptitle':ptitle,'flashvars':flashvars,'player':MukioPlayerURI,'desc':description});
 }
 //得到播放序号
 function getVideoIndex() {
@@ -94,7 +95,7 @@ function renderPlayer(list,index) {
   descfield.innerHTML = list[index]['desc']
   var videofield = document.getElementById('mkplayer-box');
   var playerstr = '<embed src="' + list[index]['player'] + '" width="' + list[index]['width'] + '" height="' + list[index]['height'] + '" type="application/x-shockwave-flash" quality="high" allowfullscreen="true"';
-  playerstr += ' flashvars="' + list[index]['flashvars'] + '"';
+  playerstr += ' flashvars="' + list[index]['flashvars'] + '&parentId=mkplayer-box"';
   playerstr += '></embed>';
   videofield.innerHTML = playerstr;
 }
