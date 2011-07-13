@@ -25,8 +25,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 //define the urls
-//define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/playerloader.swf');
-define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukioplayer1.swf');
+define('MUKIOPLAYER_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/playerloader.swf');
+define('MUKIOPLAYER1_URL'   ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukioplayer1.swf');
 define('MUKIOPLAYER_JS_URL' ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-sect.js');
 define('MUKIOPLAYER_JS2_URL',WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-prompt.js');
 define('MUKIOTAG_JS_URL'    ,WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__)) . '/static/mukio-tag.js');
@@ -83,6 +83,7 @@ if (!class_exists('CVideosManager')) {
                         'perpage'=> 30,
                         'permission'=> 0,
                         'maxlength'=> 128,
+                        'playertype'=>1,
           );
           update_option($this->optionsName, $theOptions);
       }
@@ -247,7 +248,7 @@ if (!class_exists('CVideosManager')) {
         return $str;
       }
       $str .= '<script type="text/javascript">';
-      $str .= '(function(){MukioPlayerURI = \'' . addslashes(MUKIOPLAYER_URL) . "';";
+      $str .= '(function(){MukioPlayerURI = \'' . addslashes($this->options['playertype'] == 1 ? MUKIOPLAYER1_URL : MUKIOPLAYER_URL) . "';";
       foreach($this->videos as $key => $v) {
         $str .=(sprintf('addVideo(%d,%d,"%s","%s","%s");',$v['atts']['width'],$v['atts']['height'],addslashes($v['flashvars']),addslashes($v['atts']['title']),addslashes($v['atts']['desc'])));
       }
@@ -287,6 +288,7 @@ if (!class_exists('CVideosManager')) {
           $this->options['perpage'] = $_POST['perpage'] + 0;
           $this->options['permission'] = $_POST['permission'] + 0;
           $this->options['maxlength'] = $_POST['maxlength'] + 0;
+          $this->options['playertype'] = $_POST['playertype'] + 0;
           
           $this->saveAdminOptions();
           echo '<div class="updated"><p>设置已保存!</p></div>';
@@ -318,6 +320,24 @@ if (!class_exists('CVideosManager')) {
           <tr valign="top"> 
             <th><label for="autopagination">启用插件的分P功能</label></th>
             <td><input type="checkbox" id="autopagination" name="autopagination" <?php echo $this->options['autopagination'] ? 'checked="checked"' : '';?>></td>
+          </tr>
+          <tr valign="top"> 
+            <th width="33%" scope="row"><strong>播放器选择:</strong></th> 
+            <td></td> 
+          </tr>
+          <tr valign="top"> 
+            <th width="33%" scope="row"><?php _e('侧栏折叠的弹幕播放器:', $this->localizationDomain); ?></th> 
+            <td>
+              <input name="playertype" type="radio" id="playertype" size="15" value="0" <?php echo $this->options['playertype'] == 0 ? 'checked="checked"' : '';?>/>
+              <span class="description">建议大小:540x432</span>
+            </td> 
+          </tr>
+          <tr valign="top"> 
+            <th width="33%" scope="row"><?php _e('传统的弹幕播放器:', $this->localizationDomain); ?></th> 
+            <td>
+              <input name="playertype" type="radio" id="playertype" size="15" value="1" <?php echo $this->options['playertype'] == 1 ? 'checked="checked"' : '';?>/>
+              <span class="description">建议大小:950x450</span>
+            </td> 
           </tr>
           <tr valign="top"> 
             <th width="33%" scope="row"><strong>查看弹幕:<br /></strong></th> 
