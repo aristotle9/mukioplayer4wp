@@ -409,6 +409,36 @@ function toggle(event) {
       }
       return count($xml->l);
     }
+    
+    
+    //bilibili格式
+    else if(count($xml->d))
+    {
+      $len = count($xml->d);
+      
+      for($i = 0; $i < $len; $i ++)
+      {
+        $item = $xml->d[$i];
+        
+        try {
+        	$a = explode(',', $item['p']);
+        	
+        	$playTime = $a[0] + 0;
+        	$mode     = $a[1] + 0;
+        	$fontsize = $a[2] + 0;
+        	$color    = $a[3] + 0;
+        	$message  = $item . '';
+        	$times    = $a[4] + 0;//不使用
+        	
+        	call_user_func(array($this->cmtdb,'insert'), $color,
+        	 $mode, $playTime, $fontsize, $message, -1,$current_user->ID);
+        	
+        } catch (Exception $e) {
+        }
+      }
+      
+      return $len;
+    }
     return false;
   }
   //处理弹幕接收
